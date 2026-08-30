@@ -1,0 +1,18 @@
+FROM python:3.11-slim AS base
+
+WORKDIR /app
+
+COPY requirements/train.txt /app/requirements/train.txt
+
+RUN pip install --no-cache-dir -r /app/requirements/train.txt
+
+FROM base AS training
+
+WORKDIR /app
+
+COPY src/ /app/src/
+COPY configs/ /app/configs/
+
+ENV PYTHONUNBUFFERED=1
+
+ENTRYPOINT ["python", "src/train.py"]
